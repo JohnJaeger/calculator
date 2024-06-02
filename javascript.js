@@ -1,3 +1,5 @@
+let body = document.querySelector("body");
+
 let calculator = document.querySelector("#calculator");
 
 let screen = document.querySelector("#screen");
@@ -36,7 +38,11 @@ function operate(){
     if (firstNumber !== "" && secondNumber !== "" && operator !== ""){
 
         if (operator === "divide"){
-            result = divide(firstNumber, secondNumber);
+            if (Number(secondNumber) !== 0){
+                result = divide(firstNumber, secondNumber);
+            } else {
+                result = "ERROR";
+            }
         }
         if (operator === "multiply"){
             result = multiply(firstNumber, secondNumber);
@@ -57,7 +63,9 @@ function operate(){
 
 function numberPress(number){
     let array = screen.textContent.split("");
-    array.push(number);
+    if (array.length <= 15){
+        array.push(number);
+    }
     screen.textContent = array.join("");
 }
 
@@ -69,6 +77,15 @@ function positiveNegative(){
         array.unshift("-");
     }
     screen.textContent = array.join("");
+}
+
+function checkIfPeriod(){
+    let array = screen.textContent.split("");
+    if (array.includes(".")){
+        return true;
+    } else {
+        return false;
+    }
 }
 
 function backspace(){
@@ -171,11 +188,79 @@ calculator.addEventListener("click", function(event){
             numberPress(0);
             break;
         case "period-button":
-            numberPress(".");
+            if (checkIfPeriod() === false){
+                numberPress(".");
+            }
             break;
         case "add-button":
             operator = "add";
             operatorPress();
             break;
     }
-})
+});
+
+body.addEventListener("keydown", function(event){
+    switch (event.key){
+        case "Enter":
+            operate();
+            break;
+        case "Backspace":
+            backspace();
+            break;
+
+        case "7":
+            numberPress(7);
+            break;
+        case "8":
+            numberPress(8);
+            break;
+        case "9":
+            numberPress(9);
+            break;
+        case "/":
+            operator = "divide";
+            operatorPress();
+            break;
+
+        case "4":
+            numberPress(4);
+            break;
+        case "5":
+            numberPress(5);
+            break;
+        case "6":
+            numberPress(6);
+            break;
+        case "*":
+            operator = "multiply";
+            operatorPress();
+            break;
+
+        case "1":
+            numberPress(1);
+            break;
+        case "2":
+            numberPress(2);
+            break;
+        case "3":
+            numberPress(3);
+            break;
+        case "-":
+            operator = "subtract";
+            operatorPress();
+            break;
+
+        case "0":
+            numberPress(0);
+            break;
+        case ".":
+            if (checkIfPeriod() === false){
+                numberPress(".");
+            }
+            break;
+        case "+":
+            operator = "add";
+            operatorPress();
+            break;
+    }
+});
